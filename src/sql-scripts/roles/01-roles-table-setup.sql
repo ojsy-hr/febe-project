@@ -4,4 +4,4 @@ CREATE TABLE `febe_project`.`roles` (
     PRIMARY KEY (`role_id`),
     UNIQUE INDEX `role_id_UNIQUE` (`role_id` ASC) VISIBLE,
     UNIQUE INDEX `role_UNIQUE` (`role` ASC) VISIBLE)
-COMMENT = 'Stores each role once with a PK. Users can be assigned to multiple roles.';
+COMMENT = 'Stores each role once with a PK. User can be assigned to multiple roles.';
