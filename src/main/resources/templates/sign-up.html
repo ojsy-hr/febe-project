@@ -9,29 +9,41 @@
     
     <body>
 
-    <header class="mb-5">
-        <div class="container-lg text-center">
-            <h1>Sign Up Below</h1>
-        </div>
-    </header>
-    
-    <section class="container-sm ps-5 pe-5">
+        <section class="container mt-5">
 
-        <form action="#" th:action="@{/createNewUser}" th:object="${username}" method="POST">
-            <div class="mb-3">
-                <label for="signupEmail" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="signupEmail" aria-describedby="signupEmailHelp">
-                <div id="signupEmailHelp" class="form-text">We'll never share your email with anyone else</div>
+            <div class="row justify-content-center">
+                <div class="card" style="width: 18rem">
+                    <div class="card-body">
+                        <h5 class="card-title">Sign Up Below</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="row align-items-start">
+                                <form action="#" th:action="@{/createNewUser}" th:object="${webUser}" method="POST">
+                                    <div class="mb-3">
+                                        <label for="signupEmail" class="form-label ">Email Address</label>
+                                        <input type="email" th:field="*{email}" class="form-control" id="signupEmail" aria-describedby="signupEmailHelp">
+                                        <div id="signupEmailHelp" class="form-text">We'll never share your email with anyone else</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="signupPassword" class="form-label">Password</label>
+                                        <input type="password" th:field="*{password}" class="form-control" id="signupPassword">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="signupHintPhrase" class="form-label">Hint Phrase</label>
+                                        <input type="text" th:field="*{hintPhrase}" class="form-control" id="signupHintPhrase">
+                                    </div>
+                                    <button class="btn btn-primary">Submit</button>
+                                    <a th:href="@{/login}" class="btn btn-success">Log In</a>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label for="signupPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="signupPassword">
-            </div>
-            <button class="btn btn-primary">Submit</button>
-        </form>
-        
-    </section>
-
+        </section>
     </body>
 </html>

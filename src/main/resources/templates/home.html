@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <head>
+        <title>FEBE</title>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    </head>
+    <body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a href="#" class="navbar-brand">FEBE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportContent"></div>
-        </div>
-    </nav>
+        <header class="text-center bg-body-secondary text-muted">
+            <div class="d-flex">
 
-</body>
+                <div class="w-25">
+                    <!-- To recentre H1 after adding logout button -->
+                </div>
+
+                <div class="text-center w-50">
+                    <h1>Welcome to FEBE</h1>
+                </div>
+
+                <div class="w-25 justify-content-end">
+                    <form action="#" th:action="@{/logout}" method="POST">
+                        <input value="Log Out" type="submit" class="btn btn-danger mt-2">
+                    </form>
+                </div>
+
+            </div>
+        </header>
+
+        <section class="container text-center mt-5">
+            <div class="row justify-content-center">
+                <p>Navigate to a page to find out more!</p>
+            </div>
+        </section>
+
+        <section class="container text-center mt-5">
+            <div class="row row-cols-auto justify-content-center">
+                <div class="col">
+                    <h2>
+                        <a href="https://www.geeksforgeeks.org/advance-java/hibernate-generatedvalue-annotation-in-jpa/">Hibernate Annotations</a>
+                    </h2>
+                </div>
+                <div class="col"></div>
+                <div class="col">
+                    <h2>
+                        <a href="https://crackstation.net/hashing-security.htm">Bcrypt Best Practice</a>
+                    </h2>
+                </div>
+                <div class="col"></div>
+                <div class="col">
+                    <h2>
+                        <a href="https://www.theodinproject.com">The Odin Project</a>
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-lg-start bg-body-secondary text-muted mt-auto">
+            <div class="text-center p-4">
+                <a th:href="@{/system}">Admin Dashboard</a>
+            </div>
+        </footer>
+    </body>
 </html>
