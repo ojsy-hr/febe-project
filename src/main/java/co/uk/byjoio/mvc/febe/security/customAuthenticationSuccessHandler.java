@@ -2,7 +2,9 @@ package co.uk.byjoio.mvc.febe.security;
 
 import java.io.IOException;
 
+import co.uk.byjoio.mvc.febe.entity.User;
 import co.uk.byjoio.mvc.febe.service.UserService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,11 +15,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthenticationSuccessHandler implements AuthenticationSuccessHandler{
+public class customAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
 
-    private UserService userService;
+    private final UserService userService;
 
-    public AuthenticationSuccessHandler(UserService userService){
+    public customAuthenticationSuccessHandler(UserService userService){
         this.userService = userService;
     }
 
@@ -30,9 +32,11 @@ public class AuthenticationSuccessHandler implements AuthenticationSuccessHandle
 
         System.out.println("User Name=" + userName);
 
+        User user = userService.findByUserName(userName);
 
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+
+        response.sendRedirect(request.getContextPath() + "/home");
     }
-
-
-
 }

@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity(name="users")
 @Table(name="users", schema="febe_project")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -36,16 +36,16 @@ public class Users {
     @JoinTable(name="users_roles", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
     private Collection<Role> roles;
 
-    public Users() {
+    public User() {
     }
 
-    public Users(String email, String password, boolean enabled) {
+    public User(String email, String password, boolean enabled) {
         this.email = email;
         this.password = password;
         this.enabled = enabled;
     }
 
-    public Users(String email, String password, boolean enabled, Collection<Role> roles) {
+    public User(String email, String password, boolean enabled, Collection<Role> roles) {
         this.email = email;
         this.password = password;
         this.enabled = enabled;
@@ -118,7 +118,7 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

@@ -1,32 +1,39 @@
-package co.uk.byjoio.mvc.febe.security;
+package co.uk.byjoio.mvc.febe.user;
 
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 
-public class User{
+public class WebUser{
 
     @NotNull(message="is required")
     @Size(min=1, message="is required")
-    private String userName;
+    //@Pattern(regexp="^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")
+    private String email;
 
     @NotNull(message="is required")
     @Size(min=1,message="is required")
     private String password;
 
-    public User() {
+    @NotNull(message="is required")
+    @Size(min=1,message="is required")
+    private String hintPhrase;
+
+    public WebUser() {
     }
 
-    public User(String userName, String password) {
-        this.userName = userName;
+    public WebUser(String email, String password, String hintPhrase) {
+        this.email = email;
         this.password = password;
+        this.hintPhrase = hintPhrase;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -35,5 +42,13 @@ public class User{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getHintPhrase() {
+        return hintPhrase;
+    }
+
+    public void setHintPhrase(String hintPhrase) {
+        this.hintPhrase = hintPhrase;
     }
 }
