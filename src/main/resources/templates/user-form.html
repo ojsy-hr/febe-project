@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>FEBE</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    </head>
+
+    <body>
+
+        <section class="container mt-5">
+
+            <h3>Edit User</h3>
+            <hr>
+
+            <form action="#" th:action="@{/system/save}" th:object="${user}" method="POST" class="w-50">
+
+                <input type="hidden" th:field="*{userId}" />
+
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label">Email Address</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="userEmail">
+                </div>
+
+                <div class="form-check mb-4">
+                    <input type="checkbox" th:field="*{enabled}" class="form-check-input" id="userEnabled">
+                    <label for="userEnabled" class="form-check-label">Account enabled</label>
+                </div>
+
+                <fieldset class="mb-4">
+                    <legend class="fs-6 fw-bold">Roles</legend>
+
+                    <div class="form-check" th:each="role : ${allRoles}">
+                        <input type="checkbox" class="form-check-input" name="roleIds"
+                               th:id="${'role-' + role.roleId}"
+                               th:value="${role.roleId}"
+                               th:checked="${#lists.contains(grantedRoleIds, role.roleId)}">
+                        <label class="form-check-label" th:for="${'role-' + role.roleId}" th:text="${role.role}"></label>
+                    </div>
+
+                    <p class="form-text" th:if="${#lists.isEmpty(allRoles)}">No roles defined in the database.</p>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a th:href="@{/system/manage-users}" class="btn btn-secondary">Cancel</a>
+
+            </form>
+
+        </section>
+
+    </body>
+</html>

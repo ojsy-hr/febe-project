@@ -3,42 +3,49 @@
 
     <head>
         <title>FEBE</title>
-        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     </head>
-    
+
     <body>
 
         <section class="container mt-5">
 
             <div class="row justify-content-center">
-                <div class="card" style="width: 18rem">
+                <div class="card" style="width: 22rem">
                     <div class="card-body">
                         <h5 class="card-title">Sign Up Below</h5>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <div class="row align-items-start">
-                                <form action="#" th:action="@{/createNewUser}" th:object="${webUser}" method="POST">
-                                    <div class="mb-3">
-                                        <label for="signupEmail" class="form-label ">Email Address</label>
-                                        <input type="email" th:field="*{email}" class="form-control" id="signupEmail" aria-describedby="signupEmailHelp">
-                                        <div id="signupEmailHelp" class="form-text">We'll never share your email with anyone else</div>
-                                    </div>
 
-                                    <div class="mb-3">
-                                        <label for="signupPassword" class="form-label">Password</label>
-                                        <input type="password" th:field="*{password}" class="form-control" id="signupPassword">
-                                    </div>
+                            <div th:if="${signUpError}" class="alert alert-danger" th:text="${signUpError}"></div>
 
-                                    <div class="mb-3">
-                                        <label for="signupHintPhrase" class="form-label">Hint Phrase</label>
-                                        <input type="text" th:field="*{hintPhrase}" class="form-control" id="signupHintPhrase">
-                                    </div>
-                                    <button class="btn btn-primary">Submit</button>
-                                    <a th:href="@{/login}" class="btn btn-success">Log In</a>
-                                </form>
-                            </div>
+                            <form action="#" th:action="@{/sign-up}" th:object="${webUser}" method="POST">
+                                <div class="mb-3">
+                                    <label for="signupEmail" class="form-label">Email Address</label>
+                                    <input type="email" th:field="*{email}" th:errorclass="is-invalid" class="form-control" id="signupEmail" aria-describedby="signupEmailHelp">
+                                    <div class="invalid-feedback" th:errors="*{email}"></div>
+                                    <div id="signupEmailHelp" class="form-text">We'll never share your email with anyone else</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="signupPassword" class="form-label">Password</label>
+                                    <input type="password" th:field="*{password}" th:errorclass="is-invalid" class="form-control" id="signupPassword">
+                                    <div class="invalid-feedback" th:errors="*{password}"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="signupHintPhrase" class="form-label">Hint Phrase</label>
+                                    <input type="text" th:field="*{hintPhrase}" th:errorclass="is-invalid" class="form-control" id="signupHintPhrase" aria-describedby="signupHintPhraseHelp">
+                                    <div class="invalid-feedback" th:errors="*{hintPhrase}"></div>
+                                    <div id="signupHintPhraseHelp" class="form-text">Used to recover your password. Max 16 characters</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a th:href="@{/login}" class="btn btn-success">Log In</a>
+                            </form>
                         </li>
                     </ul>
                 </div>

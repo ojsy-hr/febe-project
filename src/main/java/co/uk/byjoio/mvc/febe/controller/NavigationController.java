@@ -7,19 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class NavigationController {
 
     @GetMapping("/")
-    public String showLanding(){
-
+    public String showLanding() {
         return "landing";
     }
 
     @GetMapping("/home")
-    public String showHome(){
+    public String showHome() {
         return "home";
-    }
-
-    @GetMapping("/system")
-    public String showSystem(){
-
-        return "system";
     }
 }

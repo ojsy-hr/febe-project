@@ -1,80 +1,108 @@
 package co.uk.byjoio.mvc.febe.service;
 
-import co.uk.byjoio.mvc.febe.dao.RoleDao;
-import co.uk.byjoio.mvc.febe.dao.UserDao;
 import co.uk.byjoio.mvc.febe.entity.Role;
 import co.uk.byjoio.mvc.febe.entity.User;
+import co.uk.byjoio.mvc.febe.repository.RoleRepository;
+import co.uk.byjoio.mvc.febe.repository.UserRepository;
 import co.uk.byjoio.mvc.febe.user.WebUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.springframework.security.core.userdetails.User.withUsername;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
-    private RoleDao roleDao;
-    private BCryptPasswordEncoder passwordEncoder;
+    private static final String DEFAULT_ROLE = "ROLE_MEMBER";
 
-    @Autowired
-    public UserServiceImpl(UserDao userDao, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder){
-        this.userDao = userDao;
-        this.roleDao = roleDao;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
-    public User findByUserName(String userName) {
-
-        return userDao.findByUserName(userName);
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
-    public void save(WebUser webUser) {
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
-        User user = new User();
+    @Override
+    public List<Role> findAllRoles() {
+        return roleRepository.findAll(Sort.by("role"));
+    }
 
-        user.setEmail(webUser.getEmail());
-        user.setPassword(passwordEncoder.encode(webUser.getPassword()));
-        user.setHintPhrase(webUser.getHintPhrase());
+    @Override
+    @Transactional
+    public void register(WebUser webUser) {
+
+        // define default role for new user
+        Role defaultRole = roleRepository.findByRole(DEFAULT_ROLE)
+                .orElseThrow(() -> new IllegalStateException(DEFAULT_ROLE + " is missing from the roles table"));
+
+        // translate webUser form data to user entity
+        User user = new User(webUser.getEmail(), passwordEncoder.encode(webUser.getPassword()), webUser.getHintPhrase());
         user.setEnabled(true);
+        // assign default role
+        user.setRoles(Set.of(defaultRole));
 
-        user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
+        // save user
+        userRepository.save(user);
+    }
 
-        userDao.save(user);
+    @Override
+    @Transactional
+    public void updateAccount(User user, Collection<Integer> roleIds) {
+
+        // Check user exists
+        User existing = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("No user with id " + user.getUserId()));
+
+        // update email
+        existing.setEmail(user.getEmail());
+        // update enabled
+        existing.setEnabled(user.isEnabled());
+        // grant/revoke roles
+        existing.setRoles(new LinkedHashSet<>(roleRepository.findAllById(roleIds)));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userDao.findByUserName(username);
+        // find user
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
 
-        if(user == null){
-            throw new UsernameNotFoundException("Invalid username or password");
-        }
 
-        Collection<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+        return withUsername(user.getEmail())
+                .password(user.getPassword())
+                .disabled(!user.isEnabled())
+                .authorities(mapRolesToAuthorities(user.getRoles()))
+                .build();
     }
 
-    private Collection<SimpleGrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
-
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-        for(Role role : roles){
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRole());
-            authorities.add(authority);
-        }
-
-        return authorities;
+    private List<SimpleGrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRole()))
+                .toList();
     }
 }

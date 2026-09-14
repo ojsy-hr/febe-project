@@ -1,22 +1,21 @@
 package co.uk.byjoio.mvc.febe.user;
 
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
 
-public class WebUser{
+public class WebUser {
 
-    @NotNull(message="is required")
-    @Size(min=1, message="is required")
-    //@Pattern(regexp="^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$")
+    @NotBlank(message = "is required")
+    @Email(message = "must be a valid email address")
+    @Size(max = 75, message = "must be 75 characters or fewer")
     private String email;
 
-    @NotNull(message="is required")
-    @Size(min=1,message="is required")
+    @NotBlank(message = "is required")
     private String password;
 
-    @NotNull(message="is required")
-    @Size(min=1,message="is required")
+    @NotBlank(message = "is required")
+    @Size(max = 16, message = "must be 16 characters or fewer")
     private String hintPhrase;
 
     public WebUser() {
