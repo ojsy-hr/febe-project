@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
     <head>
         <title>FEBE</title>
         <meta charset="UTF-8" />
@@ -17,7 +18,9 @@
                 </div>
 
                 <div class="text-center w-50">
-                    <h1>System Settings</h1>
+                    <h1>Profile</h1>
+<!--                    <p th:text="${currentUser.userId}"></p>-->
+                    <p sec:authentication="name"></p>
                 </div>
 
                 <div class="w-25 justify-content-end">
@@ -32,37 +35,30 @@
         <section class="container mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Configure users from this page</h5>
+                    <h5 class="card-title">Make changes to your profile here!</h5>
                 </div>
+
+                <a th:href="@{/profile/edit-profile(user_profile_id=${userProfile.getUserProfileId()})}" class="btn btn-info btn-sm">
+                    Edit Profile
+                </a>
 
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>
-                            <th scope="col">Email</th>
-                            <th scope="col">Roles</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Edit</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Gender</th>
+<!--                            <th scope="col">DoB</th>-->
+                            <th scope="col">Hobby</th>
+                            <th scope="col">Bio</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr th:each="user : ${users}">
-                            <td th:text="${user.email}"></td>
-                            <td>
-                                <span class="badge text-bg-secondary me-1"
-                                      th:each="role : ${user.roles}"
-                                      th:text="${role.role}"></span>
-                            </td>
-                            <td th:text="${user.enabled} ? 'Enabled' : 'Disabled'"></td>
-                            <td>
-                                <a th:href="@{/system/edit-user(email=${user.email})}" class="btn btn-info btn-sm">
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(users)}">
-                            <td colspan="4" class="text-muted">No users yet.</td>
-                        </tr>
+                        <td th:text="${userProfile.age}"></td>
+                        <td th:text="${userProfile.gender}"></td>
+<!--                        <td th:text="${userProfile.dateOfBirth}"></td>-->
+                        <td th:text="${userProfile.hobby}"></td>
+                        <td th:text="${userProfile.bio}"></td>
                     </tbody>
                 </table>
             </div>
@@ -75,4 +71,5 @@
         </footer>
 
     </body>
+
 </html>

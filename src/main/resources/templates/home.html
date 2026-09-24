@@ -21,6 +21,10 @@
                 </div>
 
                 <div class="w-25 justify-content-end">
+                    <form action="#" th:action="@{/profile}">
+                        <input value="Profile" type="submit" class="btn btn-primary mt-2">
+                    </form>
+
                     <form action="#" th:action="@{/logout}" method="POST">
                         <input value="Log Out" type="submit" class="btn btn-danger mt-2">
                     </form>
