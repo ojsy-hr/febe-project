@@ -2,6 +2,7 @@ package co.uk.byjoio.mvc.febe.service;
 
 import co.uk.byjoio.mvc.febe.entity.Role;
 import co.uk.byjoio.mvc.febe.entity.User;
+import co.uk.byjoio.mvc.febe.entity.UserProfile;
 import co.uk.byjoio.mvc.febe.user.WebUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -37,4 +38,9 @@ public interface UserService extends UserDetailsService {
      * @param roleIds to update
      */
     void updateAccount(User user, Collection<Integer> roleIds);
+
+    Optional<UserProfile> findUserProfileById();
+    Optional<UserProfile> findUserProfileById(int userId);
+
+    void saveUserProfile(UserProfile profile);
 }
