@@ -7,9 +7,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Role configuration, login/logout handling and Password encoding
+ *
+ * @author ojsy-hr
+ * @version v1.0.0
+ * @since 13-09-2026
+ */
 @Configuration
 public class FebeSecurityConfig {
 
+    /**
+     * @param http to configure security
+     * @param authenticationSuccessHandler to validate authentication
+     * @return relevant page to user in web browser
+     * @throws Exception if user access is denied
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthenticationSuccessHandler authenticationSuccessHandler) throws Exception {
 
@@ -18,7 +31,10 @@ public class FebeSecurityConfig {
                         .requestMatchers("/members/**").hasRole("MEMBER")
                         .requestMatchers("/system/**").hasRole("ADMIN")
                         // open to anyone, logged in or not
-                        .requestMatchers("/", "/sign-up/**", "/access-denied").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/sign-up/**",
+                                "/access-denied").permitAll()
                         // catch all - any other url, user must be logged in/authenticated
                         .anyRequest().authenticated())
                 .formLogin(form -> form
@@ -32,6 +48,10 @@ public class FebeSecurityConfig {
         return http.build();
     }
 
+    /**
+     * Encodes users passwords
+     * @return Bcrypt Password Encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
